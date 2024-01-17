@@ -13,9 +13,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 Route::get('/chat', function () {
     return view('messenger');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+});
+
+Route::middleware(['guest'])->group(function () {
+    Route::get('/', function () {
+        return view('welcome'); // Change 'auth.login' to the actual login view you are using
+    })->name('welcome');
 });
